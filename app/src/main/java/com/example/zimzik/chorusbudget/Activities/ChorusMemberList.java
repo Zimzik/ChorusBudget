@@ -1,27 +1,22 @@
 package com.example.zimzik.chorusbudget.Activities;
 
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Intent;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.zimzik.chorusbudget.Adapters.MemberListAdapter;
 import com.example.zimzik.chorusbudget.R;
 import com.example.zimzik.chorusbudget.Room.AppDB;
 import com.example.zimzik.chorusbudget.Room.Member;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Observable;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,7 +26,7 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
 
     private ListView lvMembers;
     private SwipeRefreshLayout swipeRefreshLayout;
-    ArrayAdapter arrayAdapter;
+    MemberListAdapter memberListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +40,13 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
         }
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(this);
-        arrayAdapter = refreshList();
+        memberListAdapter = refreshList();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        arrayAdapter = refreshList();
+        memberListAdapter = refreshList();
     }
 
     @Override
@@ -67,7 +62,7 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
 
             @Override
             public boolean onQueryTextChange(String s) {
-                arrayAdapter.getFilter().filter(s);
+                //arrayAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -93,8 +88,7 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
         return true;
     }
 
-    private ArrayAdapter refreshList() {
-        lvMembers = findViewById(R.id.lv_members);
+    private MemberListAdapter refreshList() {
         AppDB db = AppDB.getsInstance(this);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<List<Member>> future = executorService.submit(() -> db.memberDao().getAllMembers());
@@ -106,9 +100,12 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
         }
         executorService.shutdown();
         Collections.sort(memberList, (m1, m2) -> m1.toString().compareToIgnoreCase(m2.toString()));
-        ArrayAdapter<Member> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, memberList);
-        lvMembers.setAdapter(arrayAdapter);
-        return arrayAdapter;
+
+        RecyclerView recyclerView = findViewById(R.id.rv_members);
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        MemberListAdapter listAdapter = new MemberListAdapter(this, memberList);
+        recyclerView.setAdapter(listAdapter);
+        return listAdapter;
     }
 
     @Override
@@ -117,3 +114,5 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
         swipeRefreshLayout.setRefreshing(false);
     }
 }
+
+

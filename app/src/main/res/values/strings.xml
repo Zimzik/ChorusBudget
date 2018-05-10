@@ -11,4 +11,5 @@
     <string name="birthday">Birthday</string>
     <string name="search">Search</string>
     <string name="new_member">New member</string>
+    <string name="remove">Remove</string>
 </resources>
