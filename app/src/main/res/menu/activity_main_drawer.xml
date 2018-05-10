@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_chor_member_list"
+            android:icon="@drawable/ic_view_list"
+            android:title="Chorus members list" />
+        <item
+            android:id="@+id/nav_revenues"
+            android:icon="@drawable/ic_trending_up"
+            android:title="Revenues" />
+        <item
+            android:id="@+id/nav_divergence"
+            android:icon="@drawable/ic_trending_down"
+            android:title="Divergence" />
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_swap_vertical_circle"
+            android:title="Statistics" />
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_exit_to_app"
+            android:title="Exit" />
+    </group>
+
+</menu>
