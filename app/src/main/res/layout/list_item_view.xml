@@ -4,6 +4,9 @@
     android:layout_height="72dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:padding="16dp">
     
     <ImageView
