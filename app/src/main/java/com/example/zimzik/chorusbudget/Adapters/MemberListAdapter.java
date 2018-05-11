@@ -6,22 +6,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.zimzik.chorusbudget.R;
 import com.example.zimzik.chorusbudget.Room.Member;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.ViewHolder> {
+public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.ViewHolder> implements Filterable {
     private LayoutInflater inflater;
     private List<Member> members;
+    private List<Member> filteredMembers;
+    private List<Member> currentMembersList;
+
 
     public MemberListAdapter(Context context, List<Member> members) {
         this.inflater = LayoutInflater.from(context);
         this.members = members;
+        this.filteredMembers = members;
+        this.currentMembersList = members;
     }
 
 
@@ -43,8 +51,42 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
         return members.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+                    filteredMembers = currentMembersList;
+                } else {
+                    ArrayList<Member> filteredList = new ArrayList<>();
+                    for(Member m: members) {
+                        if(m.toString().toLowerCase().contains(charString)) {
+                            filteredList.add(m);
+                        }
+                    }
+                    filteredMembers = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredMembers;
+                return filterResults;
+
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                members = (List<Member>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView name, age;
+
         ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.tv_name);

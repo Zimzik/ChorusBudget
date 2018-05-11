@@ -62,8 +62,8 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
 
             @Override
             public boolean onQueryTextChange(String s) {
-                //arrayAdapter.getFilter().filter(s);
-                return false;
+                memberListAdapter.getFilter().filter(s);
+                return true;
             }
         });
         return true;
@@ -102,7 +102,6 @@ public class ChorusMemberList extends AppCompatActivity implements SwipeRefreshL
         Collections.sort(memberList, (m1, m2) -> m1.toString().compareToIgnoreCase(m2.toString()));
 
         RecyclerView recyclerView = findViewById(R.id.rv_members);
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         MemberListAdapter listAdapter = new MemberListAdapter(this, memberList);
         recyclerView.setAdapter(listAdapter);
         return listAdapter;
