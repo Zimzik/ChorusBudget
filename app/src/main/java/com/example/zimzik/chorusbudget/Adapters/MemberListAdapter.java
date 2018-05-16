@@ -1,54 +1,65 @@
 package com.example.zimzik.chorusbudget.Adapters;
 
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.example.zimzik.chorusbudget.Activities.ChorusMemberList;
 import com.example.zimzik.chorusbudget.R;
 import com.example.zimzik.chorusbudget.Room.Member;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.ViewHolder> implements Filterable {
-    private LayoutInflater inflater;
-    private List<Member> members;
-    private List<Member> filteredMembers;
-    private List<Member> currentMembersList;
+    private List<Member> membersList;
+    private List<Member> filteredMembersList;
+    private ClickAction<Member> onClickListener;
+    private ClickAction<Member> onContextMenuClick;
 
-
-    public MemberListAdapter(Context context, List<Member> members) {
-        this.inflater = LayoutInflater.from(context);
-        this.members = members;
-        this.filteredMembers = members;
-        this.currentMembersList = members;
+    public MemberListAdapter(List<Member> membersList, ClickAction<Member> onClickListener, ClickAction<Member> onContextMenuClick) {
+        this.membersList = membersList;
+        this.filteredMembersList = membersList;
+        this.onClickListener = onClickListener;
+        this.onContextMenuClick = onContextMenuClick;
     }
 
 
     @Override
     public MemberListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_view, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MemberListAdapter.ViewHolder holder, int position) {
-        Member member = members.get(position);
+        final Member member = filteredMembersList.get(position);
         holder.name.setText(member.toString());
-        holder.age.setText(calculateAge(member.getBirthday()) + " y.o.");
+        holder.age.setText(String.format("%d y.o.", ChorusMemberList.calculateAge(member.getBirthday())));
+        holder.digit.setOnClickListener(view -> {
+            PopupMenu menu = new PopupMenu(view.getContext(), holder.digit);
+            menu.inflate(R.menu.context_menu);
+            menu.setOnMenuItemClickListener(menuItem -> {
+                if (menuItem.getItemId() == R.id.cmb_delete) {
+                    onContextMenuClick.call(member);
+                }
+                return false;
+            });
+            menu.show();
+        });
+        holder.itemView.setOnClickListener(v -> onClickListener.call(member));
     }
 
     @Override
     public int getItemCount() {
-        return members.size();
+        return filteredMembersList.size();
     }
 
     @Override
@@ -59,48 +70,48 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
                 String charString = charSequence.toString();
 
                 if (charString.isEmpty()) {
-                    filteredMembers = currentMembersList;
+                    filteredMembersList = membersList;
                 } else {
                     ArrayList<Member> filteredList = new ArrayList<>();
-                    for(Member m: members) {
+                    for(Member m: membersList) {
                         if(m.toString().toLowerCase().contains(charString)) {
                             filteredList.add(m);
                         }
                     }
-                    filteredMembers = filteredList;
+                    filteredMembersList = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredMembers;
+                filterResults.values = filteredMembersList;
                 return filterResults;
 
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                members = (List<Member>) filterResults.values;
+                filteredMembersList = (List<Member>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView name, age;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+        final TextView name, age, digit;
 
         ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.tv_name);
             age = view.findViewById(R.id.tv_age);
+            digit = view.findViewById(R.id.tv_option_digit);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+
         }
     }
 
-    private int calculateAge(long birthday) {
-        Calendar dob = Calendar.getInstance();
-        Calendar today = Calendar.getInstance();
-        dob.setTime(new Date(birthday));
-        dob.add(Calendar.DAY_OF_MONTH, -1);
-        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-        if (today.get(Calendar.DAY_OF_YEAR) <= dob.get(Calendar.DAY_OF_YEAR)) age--;
-        return age;
+    public interface ClickAction<T> {
+        void call(T object);
     }
 }

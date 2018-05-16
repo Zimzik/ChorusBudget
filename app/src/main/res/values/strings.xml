@@ -13,4 +13,9 @@
     <string name="new_member">New member</string>
     <string name="remove">Remove</string>
     <string name="years_old"> y.o.</string>
+    <string name="delete">Delete</string>
+    <string name="_8942">⋮</string>
+    <string name="Delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="phone_number">Phone number</string>
 </resources>

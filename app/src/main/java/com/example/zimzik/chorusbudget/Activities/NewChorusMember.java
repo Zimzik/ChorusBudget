@@ -23,7 +23,7 @@ public class NewChorusMember extends AppCompatActivity implements DatePickerDial
     public static final String DATEPICKER_TAG = "datepicker";
     private Date birthday;
     private AppDB db;
-    private EditText etFirstName, etSecondName;
+    private EditText etFirstName, etSecondName, etPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class NewChorusMember extends AppCompatActivity implements DatePickerDial
         //Init EditTexts
         etFirstName = findViewById(R.id.et_first_name);
         etSecondName = findViewById(R.id.et_second_name);
+        etPhoneNumber = findViewById(R.id.et_phone_number);
 
          //Init DB
         db = AppDB.getsInstance(this);
@@ -67,11 +68,13 @@ public class NewChorusMember extends AppCompatActivity implements DatePickerDial
             String firstName = etFirstName.getText().toString();
             String secondName = etSecondName.getText().toString();
             String stringBirthday = tvBirthday.getText().toString();
+            String strintPhoneNumber = etPhoneNumber.getText().toString();
             etFirstName.setError(null);
             etSecondName.setError(null);
             tvBirthday.setError(null);
+            etPhoneNumber.setError(null);
 
-            if (firstName.isEmpty() || secondName.isEmpty() || stringBirthday.equals("Birthday")) {
+            if (firstName.isEmpty() || secondName.isEmpty() || stringBirthday.equals("Birthday") || strintPhoneNumber.isEmpty()) {
                 if (firstName.isEmpty()) {
                     etFirstName.setError("This field is empty!");
                 }
@@ -81,9 +84,12 @@ public class NewChorusMember extends AppCompatActivity implements DatePickerDial
                 if (stringBirthday.equals("Birthday")) {
                     tvBirthday.setError("This field is empty");
                 }
+                if (strintPhoneNumber.isEmpty()) {
+                    etPhoneNumber.setError("This field is empty");
+                }
             } else {
                 //Create new thread to save data on DB
-                Thread insert = new Thread(() -> db.memberDao().insertAll(new Member(firstName, secondName, birthday.getTime())));
+                Thread insert = new Thread(() -> db.memberDao().insertAll(new Member(firstName, secondName, birthday.getTime(), Integer.valueOf(strintPhoneNumber))));
                 insert.start();
                 try {
                     insert.join();
@@ -98,9 +104,11 @@ public class NewChorusMember extends AppCompatActivity implements DatePickerDial
                 etFirstName.setError(null);
                 etSecondName.setError(null);
                 tvBirthday.setError(null);
+                etPhoneNumber.setError(null);
                 etFirstName.setText("");
                 etSecondName.setText("");
                 tvBirthday.setText(R.string.birthday);
+                etPhoneNumber.setText("");
             }
         });
     }
