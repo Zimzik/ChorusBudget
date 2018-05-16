@@ -23,7 +23,8 @@
         </activity>
         <activity android:name=".Activities.ChorusMemberList" />
         <activity android:name=".Activities.NewChorusMember" />
-        <activity android:name=".Activities.CurrentMember"></activity>
+        <activity android:name=".Activities.CurrentMember" />
+        <activity android:name=".Activities.EditChorusMember"></activity>
     </application>
 
 </manifest>

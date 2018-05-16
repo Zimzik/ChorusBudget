@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:orientation="vertical"
+    tools:context="com.example.zimzik.chorusbudget.Activities.NewChorusMember">
+
+
+    <!--First name field-->
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_em_first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_em_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_person"
+            android:hint="@string/first_name" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <!--Second name fied-->
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_em_second_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_em_second_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_person"
+            android:hint="@string/second_name" />
+    </android.support.design.widget.TextInputLayout>
+
+    <!--Birthday field-->
+    <TextView
+        android:id="@+id/tv_em_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="26dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_date_range"
+        android:text="@string/birthday"
+        android:textSize="17sp" />
+
+    <!--underline-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:background="#000" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_em_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_em_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/ic_phone"
+            android:hint="@string/phone_number"
+            android:inputType="number"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/save_changes_em_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="8dp"
+        android:background="#00aa8d"
+        android:text="@string/save"
+        android:textColor="#fff" />
+
+</LinearLayout>

@@ -14,9 +14,9 @@ public class Member {
     private String firstName;
     private String lastName;
     private long birthday;
-    private int phoneNumber;
+    private long phoneNumber;
 
-    public Member(String firstName, String lastName, long birthday, int phoneNumber) {
+    public Member(String firstName, String lastName, long birthday, long phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
@@ -55,11 +55,11 @@ public class Member {
         this.birthday = birthday;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
